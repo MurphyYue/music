@@ -23,9 +23,9 @@ function loadJs(m){
 	})
 }
 $(function(){
-	
 	route("table");
-	route("paly",$("#global"))
+	route("play",$("#global"));
 	
 
 })
+var myPlayList=[];

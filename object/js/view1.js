@@ -39,6 +39,7 @@
 			success:function(data){
 				if(data.code==200){
 					localStorage.playlists=JSON.stringify(data.playlists);
+					
 					localStorage.cacheTime=new Date().getTime();
 					callBack(data.playlists)
 				}
@@ -54,14 +55,16 @@
 	}
 	};
 	getPlaylists(function(data){
-		console.log(data)
 		var $listContent=$(".list .content")
 		var $item=$(".template-item").html()
 		$listContent.html("")
 		for(var i=0;i<data.length;i++){
 			$($item)
-			.find(".pic img").attr("src",data[i].coverImgUrl).end()
+			.find(".pic").attr("href","#view4?id="+data[i].id).end()
 			.find("p").html(data[i].name).end()
+			.find(".pic img").attr("src",data[i].coverImgUrl).on("click",function(){
+				route("view4",$("#share"));
+			}).end()
 			.find(".number").html(data[i].playCount).end()
 			.appendTo($listContent)
 		}

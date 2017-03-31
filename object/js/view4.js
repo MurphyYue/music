@@ -8,6 +8,7 @@
 			p = p[1];
 		else
 			p = url;
+
 		p = p.split("?");
 		if(p.length < 2) {
 			params.anchor = p[0];
@@ -25,11 +26,11 @@
 	};
 	function getPlaylist(callBack){
 		
-		var id=getUrlParams().id
+		var id=getUrlParams().id;
+		
 		$.ajax({
 			type:"get",
-			//url:"https://api.imjad.cn/cloudmusic/?type=playlist&id="+id,
-			url:"api/playlist.json",
+			url:"https://api.imjad.cn/cloudmusic/?type=playlist&id="+id,
 			async:true,
 			success:function(data){
 				if(data.code==200){
@@ -39,22 +40,52 @@
 		});
 	};
 	getPlaylist(function(data){
-		console.log(data);
+		
 		var $playList=$(".list ol");
 		var listItem=$(".playlistTemplate").html()
+		var $myPlayList=(".myPlayList ul")
+		var myListItem=$("myPlayListTemplate").html();
 		$(".playlist-info").find(".info-title").html(data.name).end()
 							.find(".author").html(data.creator.nickname).end()
+							.find("img").attr({"src":data.creator.backgroundUrl})
+							
 		for(var i=0;i<data.tracks.length;i++){
+			var index="";
 			$(listItem)
 			.find(".song").html(data.tracks[i].name).end()
 			.find(".singer").html(data.tracks[i].ar[0].name).end()
-			.appendTo($playList)
-			.data("music",data.tracks[i]);
+			.data("music",data.tracks[i])
 			.on("click",function(){
 				var m=$(this).data("music");
-				play(m);
-			});
+				$(".fixed-bot")
+				.css({"display":"block"})
+				.find(".pic img").attr({"src":m.al.picUrl})
+				audioPlay.play(m);
+				myPlayList.push(m);
+				index=$(this).index()
+				
+				console.log(index)
+				/*$(myListItem)
+				.find(".song").html(myPlayList.name).end()
+				.find(".singer").html(myPlayList.ar[0].name).end()
+				.appendTo($myPlayList)*/
+				
+			})
+			.appendTo($playList)
 			
+			$(".control .next").on("click",function(){
+				index++;
+				if(index>=data.tracks.length){
+					index=0
+				}
+				console.log(index)
+				audioPlay.play(data.tracks[index]);		
+			})
 		}
+		
+	});
+	$(".head .back").on("click",function(){
+		route("table");
 	})
+	
 })()

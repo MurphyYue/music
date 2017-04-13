@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="jquery-3.1.0.min.js"></script>
+		<script>
+			$(function(){
+				$('#btn').click(function(){
+					$.ajax({
+						type:"get",
+						url:"https://api.imjad.cn/cloudmusic/?type=playlist&id=646048615&cb=?",
+						async:false,
+						dataType : "jsonp",
+						jsonp : "cb",
+						success:function(data){
+							console.log(data.playlist)
+						},
+						error:function(){
+							alert(2)
+						}
+					});
+					
+					function data(data){
+						console.log(data)
+					}
+				})
+			})
+		</script>
+	</head>
+	<body>
+		<button type="button" id="btn">aa</button>
+	</body>
+</html>
